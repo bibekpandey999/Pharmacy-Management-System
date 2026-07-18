@@ -52,7 +52,7 @@ interface EMRManagerProps {
   onRefreshPatients?: () => void;
 }
 
-const EMR_API_BASE = 'http://localhost:5000/api/emr';
+const EMR_API_BASE = 'https://pharmacy-management-system-ni9u.onrender.com/api/emr';
 
 const getLoggedInPharmacyId = (): string => {
   try {
@@ -207,7 +207,7 @@ const handleRefreshPickerPatients = async () => {
       }
     } catch (error) {
       console.error('Failed to fetch EMR records:', error);
-      setFetchError('Could not reach the backend server (http://localhost:5000). Is it running?');
+      setFetchError('Could not reach the backend server (https://pharmacy-management-system-ni9u.onrender.com). Is it running?');
     } finally {
       setIsLoadingRecords(false);
     }

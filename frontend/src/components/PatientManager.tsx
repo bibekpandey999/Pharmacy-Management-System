@@ -11,7 +11,7 @@ interface PatientManagerProps {
   setSelectedPatient: (patient: Patient | null) => void;
   onStartSaleForPatient: (patient: Patient) => void;
 }
-const API_BASE = 'http://localhost:5000/api/patients';
+const API_BASE = 'https://pharmacy-management-system-ni9u.onrender.com/api/patients';
 
 // Helper to safely read the logged-in pharmacy's ID from localStorage.
 // Adjust the key name below ('pharmacyId') if your login flow stores it under a different key.
@@ -78,7 +78,7 @@ export default function PatientManager({
       }
     } catch (error) {
       console.error('🔴 Failed to fetch patients from MongoDB:', error);
-      setFetchError('Could not reach the backend server (http://localhost:5000). Is it running?');
+      setFetchError('Could not reach the backend server (https://pharmacy-management-system-ni9u.onrender.com). Is it running?');
     } finally {
       setIsLoadingPatients(false);
     }

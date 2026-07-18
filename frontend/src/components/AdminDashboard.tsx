@@ -86,7 +86,7 @@ export default function AdminDashboard({ user, lang, onLogout }: AdminDashboardP
   const [formLocation, setFormLocation] = useState('');
   const [formPanOrVat, setFormPanOrVat] = useState('');
 
-  const BACKEND_URL = 'http://localhost:5000';
+  const BACKEND_URL = 'https://pharmacy-management-system-ni9u.onrender.com';
 
   const t = {
     en: {

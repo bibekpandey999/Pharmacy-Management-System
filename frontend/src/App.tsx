@@ -22,7 +22,7 @@ import StaffManager from './components/StaffManager';
 import PharmacySettings from './components/Setting';
 
 // Base URL for the live Express + MongoDB backend
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://pharmacy-management-system-ni9u.onrender.com/api';
 
 /* ------------------------------------------------------------------ */
 /*  Staff role -> page access configuration                            */

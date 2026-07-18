@@ -23,7 +23,7 @@ import { TRANSLATIONS } from '../translations';
 // CONFIG
 // ==========================================
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://pharmacy-management-system-ni9u.onrender.com';
 const INVENTORY_URL = `${API_BASE}/api/inventory`;
 const BILLS_URL = `${API_BASE}/api/bills`;
 const DEFAULT_VAT_RATE = 13;

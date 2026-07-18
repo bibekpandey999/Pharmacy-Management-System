@@ -9,7 +9,7 @@ const PharmacyStaff =require("./backend/models/loginStaff")
 const EMR = require("./models/emr");
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 
 // Added http://localhost:3000 here to match your frontend dev server port!
@@ -1004,7 +1004,7 @@ app.delete("/api/staff/:id", async (req, res) => {
 
 // Start DB connection before starting server
 conectDb().then(() => {
-  app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Pharmacy full-stack server running on port ${PORT}`);
 });
 }).catch((err) => {

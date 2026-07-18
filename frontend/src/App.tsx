@@ -362,10 +362,9 @@ export default function App() {
         });
         const data = await response.json();
         
-        if (response.ok && data.success) {
+          if (response.ok && data.success) {
           const targetUser = data.user || data.data?.user || data.data || data;
           
-          // 🛠️ FIX: Check if the custom text identifier field 'id' is "admin"
           const isAdminUser = !!(
             targetUser?.isAdmin === true || 
             targetUser?.role === 'Admin' ||
@@ -429,8 +428,9 @@ export default function App() {
   }, [staffPayload]);
 
   // Full logout: clears both pharmacy session and any staff session
-  const handleLogout = () => {
+   const handleLogout = () => {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
     localStorage.removeItem('staffRole');
     localStorage.removeItem('staffId');
     localStorage.removeItem('staffPharmacyName');
@@ -450,7 +450,7 @@ export default function App() {
   };
 
   // Validates role data dynamically using the parameters returned by LoginScreen
-  const handleLoginSuccess = (token: string, userDetails?: any) => {
+ const handleLoginSuccess = (token: string, userDetails?: any) => {
     localStorage.setItem('authToken', token);
     
     let isUserAdmin = false;
@@ -474,7 +474,6 @@ export default function App() {
 
     const roleSource = userDetails?.user || userDetails?.data?.user || userDetails?.data || userDetails || decodedPayload || {};
     
-    // 🛠️ FIX: Fallback to evaluating the login username string 'id'
     if (
       roleSource.isAdmin === true ||
       roleSource.role === 'Admin' ||
@@ -490,6 +489,12 @@ export default function App() {
       id: roleSource.id || roleSource._id || 'user-id',
       pharmacyName: roleSource.pharmacyName || 'Pharmacy Workspace' 
     });
+
+    localStorage.setItem('user', JSON.stringify({
+      _id: roleSource._id || roleSource.id || '',
+      id: roleSource.id || roleSource._id || '',
+      pharmacyName: roleSource.pharmacyName || '',
+    }));
     
     setAuthState({
       isAuthenticated: true,

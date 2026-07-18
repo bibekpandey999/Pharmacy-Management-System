@@ -5,7 +5,7 @@ const userModule = require("./models/user");
 const Inventory = require("./models/inventoryAndPOs");
 const Bill = require("./models/bill");
 const PharmacyUser = require("./models/login");
-const PharmacyStaff =require("./backend/models/loginStaff")
+const PharmacyStaff = require("./models/loginStaff");
 const EMR = require("./models/emr");
 
 const app = express();

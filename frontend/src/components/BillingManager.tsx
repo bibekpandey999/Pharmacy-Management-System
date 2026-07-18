@@ -22,7 +22,7 @@ const getLoggedInPharmacyId = (): string => {
     const raw = localStorage.getItem('user');
     if (!raw) return '';
     const parsed = JSON.parse(raw);
-    return parsed?.id ? String(parsed.id) : '';
+  return (parsed?.id || parsed?._id) ? String(parsed.id || parsed._id) : '';
   } catch {
     return '';
   }

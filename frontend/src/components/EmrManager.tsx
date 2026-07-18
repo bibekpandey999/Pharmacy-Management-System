@@ -195,14 +195,14 @@ const handleRefreshPickerPatients = async () => {
     }
 
     try {
-      const response = await fetch(EMR_API_BASE);
-      const result = await response.json();
-      if (result.success && Array.isArray(result.data)) {
-        const scoped = result.data.filter(
-          (r: any) => String(r.pharmacyId || '').trim() === String(pharmacyId).trim()
-        );
-        setAllRecords(scoped);
-      } else {
+    const response = await fetch(EMR_API_BASE);
+const result = await response.json();
+if (result.success && Array.isArray(result.data)) {
+  const scoped = result.data.filter(
+    (r: any) => String(r.pharmacyId || '').trim() === String(pharmacyId).trim()
+  );
+  setAllRecords(scoped);
+} else {
         setFetchError('Server responded but returned no valid EMR data.');
       }
     } catch (error) {

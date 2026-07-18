@@ -69,9 +69,9 @@ export default function PatientManager({
       if (result.success && Array.isArray(result.data)) {
         // Only keep patients whose pharmacyId matches the logged-in pharmacy's ID
         const scopedPatients = result.data.filter((p: any) => {
-          const patientPharmacyId = p.pharmacyId || '';
-          return String(patientPharmacyId).trim() === String(currentPharmacyId).trim();
-        });
+  const patientPharmacyId = p.pharmacyId || '';
+  return String(patientPharmacyId).trim() === String(currentPharmacyId).trim();
+});
         setLivePatients(scopedPatients);
       } else {
         setFetchError('Server responded but returned no valid patient data.');

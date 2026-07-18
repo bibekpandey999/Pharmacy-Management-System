@@ -225,12 +225,15 @@ export default function Dashboard({
   // ==========================================
  const [pharmacyId, setPharmacyId] = useState<string>('');
 
-  useEffect(() => {
+useEffect(() => {
   try {
     const raw = localStorage.getItem(PHARMACY_USER_STORAGE_KEY);
     if (raw) {
       const storedUser = JSON.parse(raw);
-      setPharmacyId(String(storedUser?.id || ''));
+      const id = storedUser?.id || storedUser?._id || storedUser?.pharmacy?.id || storedUser?.pharmacy?._id || '';
+      setPharmacyId(String(id));
+    } else {
+      console.warn('No item found in localStorage under key:', PHARMACY_USER_STORAGE_KEY);
     }
   } catch (err) {
     console.error('Failed to parse pharmacy user from localStorage:', err);

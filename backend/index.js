@@ -7,31 +7,19 @@ const Bill = require("./models/bill");
 const PharmacyUser = require("./models/login");
 const PharmacyStaff = require("./models/loginStaff");
 const EMR = require("./models/emr");
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const mongoose = require('mongoose');
+
+conectDb();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-
-// Added http://localhost:3000 here to match your frontend dev server port!
-// index.js
-const allowedOrigins = [
-    process.env.FRONTEND_URL, // This pulls from your Render Environment settings
-    "http://localhost:3000",
-    "http://localhost:5173"
-].filter(Boolean); // This removes any empty values
+app.set('trust proxy', 1);
 
 const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl)
-        if (!origin) return callback(null, true);
-        
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.error(`Blocked by CORS: ${origin}`); // Log the blocked origin
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: "https://pharmacy-management-system-7co8wq707-ramitnpns-projects.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
@@ -40,6 +28,22 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// FIXED SESSION CONFIGURATION
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your_super_secret_key',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+        client: mongoose.connection.getClient() // This connects your session to your MongoDB
+    }),
+    cookie: {
+        // Use 'true' for Render (HTTPS), 'false' for localhost
+        secure: process.env.NODE_ENV === 'production', 
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+    }
+}));
 // Global Helper functions
 const getValue = (val, fallback) => (val !== undefined && val !== null && String(val).trim() !== "") ? val : fallback;
 

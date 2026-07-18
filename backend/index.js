@@ -18,9 +18,28 @@ const PORT = process.env.PORT || 5000;
 
 app.set('trust proxy', 1);
 
+
+const allowedOrigins = [
+  "https://pharmacy-management-system-ramitnpns-projects.vercel.app", // replace with YOUR actual stable production domain
+];
 // CORS and JSON parsing set up immediately, not gated on DB connection
 app.use(cors({
-    origin: "https://pharmacy-management-system-7co8wq707-ramitnpns-projects.vercel.app",
+    origin: function (origin, callback) {
+        // allow requests with no origin (like Postman, curl, mobile apps)
+        if (!origin) return callback(null, true);
+
+        // allow your stable production domain
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        // allow ANY Vercel preview deploy under your project
+        if (/^https:\/\/pharmacy-management-system-.*-ramitnpns-projects\.vercel\.app$/.test(origin)) {
+            return callback(null, true);
+        }
+
+        callback(new Error("Not allowed by CORS: " + origin));
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],

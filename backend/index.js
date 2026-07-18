@@ -1004,9 +1004,9 @@ app.delete("/api/staff/:id", async (req, res) => {
 
 // Start DB connection before starting server
 conectDb().then(() => {
-    app.listen(PORT, () => {
-        console.log(`📡 Clinic & Inventory Combined Backend online at: http://localhost:${PORT}`);
-    }); 
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Pharmacy full-stack server running on port ${PORT}`);
+});
 }).catch((err) => {
     console.error("❌ Critical System Halt: Server could not start because Database connection failed.");
 });

@@ -11,39 +11,48 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 
-conectDb();
+// ... all your require statements ...
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.set('trust proxy', 1);
+// 1. Connect to DB first
+conectDb(); 
 
-const corsOptions = {
-    origin: "https://pharmacy-management-system-7co8wq707-ramitnpns-projects.vercel.app",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-};
+// 2. Wait for the connection to be ready before adding session middleware
+mongoose.connection.once('open', () => {
+    console.log("MongoDB connection established for sessions.");
 
-app.use(cors(corsOptions));
-app.use(express.json());
+    app.set('trust proxy', 1);
 
-// FIXED SESSION CONFIGURATION
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'your_super_secret_key',
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-        client: mongoose.connection.getClient() // This connects your session to your MongoDB
-    }),
-    cookie: {
-        // Use 'true' for Render (HTTPS), 'false' for localhost
-        secure: process.env.NODE_ENV === 'production', 
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000
-    }
-}));
+    app.use(cors({
+        origin: "https://pharmacy-management-system-7co8wq707-ramitnpns-projects.vercel.app",
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"]
+    }));
+
+    app.use(express.json());
+
+    app.use(session({
+        secret: process.env.SESSION_SECRET || 'your_secret',
+        resave: false,
+        saveUninitialized: false,
+        store: MongoStore.create({
+            client: mongoose.connection.getClient()
+        }),
+        cookie: {
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000
+        }
+    }));
+
+    // 3. Start the server ONLY after everything is ready
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
+
 // Global Helper functions
 const getValue = (val, fallback) => (val !== undefined && val !== null && String(val).trim() !== "") ? val : fallback;
 

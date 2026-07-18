@@ -14,9 +14,9 @@ const PORT = process.env.PORT || 5000;
 
 // Added http://localhost:3000 here to match your frontend dev server port!
 const allowedOrigins = [
-    process.env.FRONTEND_URL,
-    "https://ict-club-f0s3w2shh-gautamaswin20-4328s-projects.vercel.app",
-    "http://localhost:3000",   // <-- Dev Server Port
+    process.env.FRONTEND_URL, // Ensure this is set in Render Dashboard
+    "https://pharmacy-management-system-o86auqvz5-ramitnpns-projects.vercel.app", 
+    "http://localhost:3000",
     "http://localhost:5173",
     "http://127.0.0.1:5173"
 ].filter(Boolean);
@@ -100,6 +100,7 @@ app.post("/api/patients", async (req, res) => {
 
 // GET Route to fetch all patients
 app.get("/api/patients", async (req, res) => {
+    console.log("DEBUG: Request received for /api/patients");
     try {
         const dbPatients = await userModule.find({});
 

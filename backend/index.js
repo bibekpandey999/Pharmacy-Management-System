@@ -8,7 +8,7 @@ const PharmacyUser = require("./models/login");
 const PharmacyStaff = require("./models/loginStaff");
 const EMR = require("./models/emr");
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+const MongoStore = require('connect-mongo').default || require('connect-mongo');
 const mongoose = require('mongoose');
 
 // ... all your require statements ...
@@ -26,11 +26,12 @@ mongoose.connection.once('open', () => {
     app.set('trust proxy', 1);
 
     app.use(cors({
-        origin: "https://pharmacy-management-system-7co8wq707-ramitnpns-projects.vercel.app",
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"]
-    }));
+    origin: "https://pharmacy-management-system-7co8wq707-ramitnpns-projects.vercel.app",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 200 // Add this line!
+}));
 
     app.use(express.json());
 

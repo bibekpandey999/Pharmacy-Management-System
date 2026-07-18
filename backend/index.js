@@ -13,21 +13,23 @@ const PORT = process.env.PORT || 5000;
 
 
 // Added http://localhost:3000 here to match your frontend dev server port!
+// index.js
 const allowedOrigins = [
-    process.env.FRONTEND_URL, // Ensure this is set in Render Dashboard
-    "https://pharmacy-management-system-o86auqvz5-ramitnpns-projects.vercel.app", 
+    process.env.FRONTEND_URL, // This pulls from your Render Environment settings
     "http://localhost:3000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173"
-].filter(Boolean);
+    "http://localhost:5173"
+].filter(Boolean); // This removes any empty values
 
 const corsOptions = {
     origin: function (origin, callback) {
-        // Postman, mobile apps, or same-origin requests sometimes have an undefined origin
-       if (!origin || allowedOrigins.includes(origin)) {
+        // Allow requests with no origin (like mobile apps or curl)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
-            callback(new Error(`CORS policy blocked: ${origin}`));
+            console.error(`Blocked by CORS: ${origin}`); // Log the blocked origin
+            callback(new Error('Not allowed by CORS'));
         }
     },
     credentials: true,
@@ -35,8 +37,7 @@ const corsOptions = {
     allowedHeaders: ["Content-Type", "Authorization"]
 };
 
-// Middleware
-app.use(cors(corsOptions)); 
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Global Helper functions

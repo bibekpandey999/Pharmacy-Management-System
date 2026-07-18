@@ -16,24 +16,23 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// 1. Connect to DB first
-conectDb(); 
+app.set('trust proxy', 1);
 
-// 2. Wait for the connection to be ready before adding session middleware
-mongoose.connection.once('open', () => {
-    console.log("MongoDB connection established for sessions.");
-
-    app.set('trust proxy', 1);
-
-    app.use(cors({
+// CORS and JSON parsing set up immediately, not gated on DB connection
+app.use(cors({
     origin: "https://pharmacy-management-system-7co8wq707-ramitnpns-projects.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    optionsSuccessStatus: 200 // Add this line!
+    optionsSuccessStatus: 200
 }));
 
-    app.use(express.json());
+app.use(express.json());
+
+conectDb();
+
+mongoose.connection.once('open', () => {
+    console.log("MongoDB connection established for sessions.");
 
     app.use(session({
         secret: process.env.SESSION_SECRET || 'your_secret',
@@ -50,8 +49,16 @@ mongoose.connection.once('open', () => {
         }
     }));
 
-    // 3. Start the server ONLY after everything is ready
+    // Register your routes AFTER session middleware is attached
+    // app.use('/api/auth', authRoutes);
+    // app.use('/api/patients', patientRoutes);
+    // ...etc
+
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
+
+mongoose.connection.on('error', (err) => {
+    console.error("MongoDB connection error:", err);
 });
 
 // Global Helper functions

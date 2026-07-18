@@ -1007,6 +1007,6 @@ conectDb().then(() => {
   app.listen(Number(PORT), "0.0.0.0", () => {
     console.log(`Pharmacy full-stack server running on port ${PORT}`);
   });
-}).catch((err: any) => {
+}).catch((err) => {
   console.error("❌ Critical System Halt: Server could not start because Database connection failed.");
 });
